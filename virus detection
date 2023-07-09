@@ -1,0 +1,18 @@
+import os
+import subprocess
+
+def scan_directory(directory):
+    for root, _, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            scan_file(file_path)
+
+def scan_file(file_path):
+    try:
+        subprocess.run(['clamscan', '-r', '--no-summary', file_path], check=True)
+        print(f"{file_path}: No virus found")
+    except subprocess.CalledProcessError:
+        print(f"{file_path}: Potential virus detected!")
+
+# Example usage: scan the current directory
+scan_directory('.')
